@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "ardrone_control")
+set(ardrone_control_MAINTAINER "haroldtreen <haroldtreen@queensu.ca>")
+set(ardrone_control_DEPRECATED "")
+set(ardrone_control_VERSION "0.0.0")
+set(ardrone_control_BUILD_DEPENDS "roscpp" "rospy" "std_msgs")
+set(ardrone_control_RUN_DEPENDS "roscpp" "rospy" "std_msgs")
+set(ardrone_control_BUILDTOOL_DEPENDS "catkin")

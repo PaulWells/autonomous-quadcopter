@@ -1,0 +1,8 @@
+prefix=/home/haroldtreen/ardrone_ws/install
+
+Name: ardrone_control
+Description: Description of ardrone_control
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/haroldtreen/ardrone_ws/install/lib 
+Requires: 
