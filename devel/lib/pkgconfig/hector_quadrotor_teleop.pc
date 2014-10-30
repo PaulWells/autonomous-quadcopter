@@ -1,0 +1,8 @@
+prefix=/home/greye/catkin_ws/devel
+
+Name: hector_quadrotor_teleop
+Description: Description of hector_quadrotor_teleop
+Version: 0.3.3
+Cflags: 
+Libs: -L/home/greye/catkin_ws/devel/lib 
+Requires: roscpp sensor_msgs geometry_msgs

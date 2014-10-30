@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "cvg_sim_msgs")
+set(cvg_sim_msgs_MAINTAINER "elliot <elliot@todo.todo>")
+set(cvg_sim_msgs_DEPRECATED "")
+set(cvg_sim_msgs_VERSION "0.0.0")
+set(cvg_sim_msgs_BUILD_DEPENDS "geometry_msgs" "message_generation")
+set(cvg_sim_msgs_RUN_DEPENDS "message_runtime" "geometry_msgs")
+set(cvg_sim_msgs_BUILDTOOL_DEPENDS "catkin")

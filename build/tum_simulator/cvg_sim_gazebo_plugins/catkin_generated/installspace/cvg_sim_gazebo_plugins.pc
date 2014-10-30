@@ -1,0 +1,8 @@
+prefix=/home/greye/catkin_ws/install
+
+Name: cvg_sim_gazebo_plugins
+Description: Description of cvg_sim_gazebo_plugins
+Version: 0.0.0
+Cflags: -I/home/greye/catkin_ws/install/include
+Libs: -L/home/greye/catkin_ws/install/lib -ldiffdrive_plugin_6w -lreset_plugin -lhector_gazebo_ros_imu -lhector_gazebo_ros_magnetic -lhector_gazebo_ros_gps -lhector_gazebo_ros_sonar -lhector_gazebo_ros_baro -lhector_gazebo_quadrotor_simple_controller -lhector_gazebo_quadrotor_state_controller
+Requires: image_transport

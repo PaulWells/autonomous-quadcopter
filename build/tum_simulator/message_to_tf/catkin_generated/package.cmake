@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "message_to_tf")
+set(message_to_tf_MAINTAINER "Elliot <e.salisbury@ecs.soton.ac.uk>")
+set(message_to_tf_DEPRECATED "")
+set(message_to_tf_VERSION "0.0.0")
+set(message_to_tf_BUILD_DEPENDS "geometry_msgs" "nav_msgs" "sensor_msgs" "tf")
+set(message_to_tf_RUN_DEPENDS "geometry_msgs" "nav_msgs" "sensor_msgs" "tf")
+set(message_to_tf_BUILDTOOL_DEPENDS "catkin")

@@ -1,0 +1,8 @@
+prefix=/home/greye/catkin_ws/devel
+
+Name: simulated_drone
+Description: Description of simulated_drone
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/greye/catkin_ws/devel/lib 
+Requires: 
