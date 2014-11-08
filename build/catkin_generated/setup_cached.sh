@@ -9,4 +9,4 @@
 # modified environment variables
 export LD_LIBRARY_PATH="/home/greye/catkin_ws/devel/lib/x86_64-linux-gnu:/opt/ros/indigo/lib/x86_64-linux-gnu:/home/greye/catkin_ws/devel/lib:/opt/ros/indigo/lib:/usr/lib/x86_64-linux-gnu/gazebo-2.2/plugins"
 export PKG_CONFIG_PATH="/home/greye/catkin_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/opt/ros/indigo/lib/x86_64-linux-gnu/pkgconfig:/home/greye/catkin_ws/devel/lib/pkgconfig:/opt/ros/indigo/lib/pkgconfig"
-export PWD="/home/greye/catkin_ws/build"
+export PWD="/home/greye/autonomous-quadcopter/build"
