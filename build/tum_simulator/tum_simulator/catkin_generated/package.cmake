@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "tum_simulator")
+set(tum_simulator_MAINTAINER "Elliot <e.salisbury@ecs.soton.ac.uk>")
+set(tum_simulator_DEPRECATED "")
+set(tum_simulator_VERSION "0.0.0")
+set(tum_simulator_BUILD_DEPENDS )
+set(tum_simulator_RUN_DEPENDS "cvg_sim_msgs" "cvg_sim_gazebo" "cvg_sim_gazebo_plugins" "message_to_tf")
+set(tum_simulator_BUILDTOOL_DEPENDS "catkin")

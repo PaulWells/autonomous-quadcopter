@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "ardrone_tutorials")
+set(ardrone_tutorials_MAINTAINER "Mike Hamer <mail@mail.com>")
+set(ardrone_tutorials_DEPRECATED "")
+set(ardrone_tutorials_VERSION "1.0.0")
+set(ardrone_tutorials_BUILD_DEPENDS )
+set(ardrone_tutorials_RUN_DEPENDS "ardrone_autonomy" "joy")
+set(ardrone_tutorials_BUILDTOOL_DEPENDS "catkin")

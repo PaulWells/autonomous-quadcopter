@@ -1,2 +1,2 @@
 - setup-file:
-    local-name: /home/haroldtreen/ardrone_ws/devel/setup.sh
+    local-name: /home/greye/catkin_ws/devel/setup.sh

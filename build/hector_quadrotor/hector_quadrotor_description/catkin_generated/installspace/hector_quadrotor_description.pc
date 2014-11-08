@@ -1,0 +1,8 @@
+prefix=/home/greye/catkin_ws/install
+
+Name: hector_quadrotor_description
+Description: Description of hector_quadrotor_description
+Version: 0.3.3
+Cflags: 
+Libs: -L/home/greye/catkin_ws/install/lib 
+Requires: 

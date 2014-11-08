@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "simulated_drone")
+set(simulated_drone_MAINTAINER "greye <greye.smyth@queensu.ca>")
+set(simulated_drone_DEPRECATED "")
+set(simulated_drone_VERSION "0.0.0")
+set(simulated_drone_BUILD_DEPENDS "roscpp" "rospy" "std_msgs")
+set(simulated_drone_RUN_DEPENDS "roscpp" "rospy" "std_msgs")
+set(simulated_drone_BUILDTOOL_DEPENDS "catkin")

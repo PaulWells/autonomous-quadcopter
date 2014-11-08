@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "cvg_sim_gazebo_plugins")
+set(cvg_sim_gazebo_plugins_MAINTAINER "elliot <elliot@todo.todo>")
+set(cvg_sim_gazebo_plugins_DEPRECATED "")
+set(cvg_sim_gazebo_plugins_VERSION "0.0.0")
+set(cvg_sim_gazebo_plugins_BUILD_DEPENDS "ardrone_autonomy" "gazebo_ros" "geometry_msgs" "image_transport" "nav_msgs" "roscpp" "sensor_msgs" "std_msgs")
+set(cvg_sim_gazebo_plugins_RUN_DEPENDS "ardrone_autonomy" "gazebo_ros" "geometry_msgs" "image_transport" "nav_msgs" "roscpp" "sensor_msgs" "std_msgs")
+set(cvg_sim_gazebo_plugins_BUILDTOOL_DEPENDS "catkin")
