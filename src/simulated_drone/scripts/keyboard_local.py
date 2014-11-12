@@ -68,7 +68,7 @@ def controller():
                 + str(frontRange.range), 1, (255, 255, 255)), (10, 10))
         if sideRange:
             screen.blit(font.render("Side Range = "
-                + str(frontRange.range), 1, (255, 255, 255)), (10, 30))
+                + str(sideRange.range), 1, (255, 255, 255)), (10, 30))
         if image:
             screen.blit(font.render("Last Image at = "
                 + str(image.header.stamp), 1, (255, 255, 255)), (10, 50))
