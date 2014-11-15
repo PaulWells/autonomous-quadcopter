@@ -1,8 +1,0 @@
-prefix=/catkin_ws/install
-
-Name: cvg_sim_msgs
-Description: Description of cvg_sim_msgs
-Version: 0.0.0
-Cflags: -I/catkin_ws/install/include
-Libs: -L/catkin_ws/install/lib 
-Requires: message_runtime

@@ -1,8 +1,0 @@
-prefix=/catkin_ws/devel
-
-Name: hector_quadrotor_demo
-Description: Description of hector_quadrotor_demo
-Version: 0.3.3
-Cflags: 
-Libs: -L/catkin_ws/devel/lib 
-Requires: 

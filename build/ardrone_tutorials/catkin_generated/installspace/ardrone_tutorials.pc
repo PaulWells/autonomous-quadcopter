@@ -1,8 +1,0 @@
-prefix=/catkin_ws/install
-
-Name: ardrone_tutorials
-Description: Description of ardrone_tutorials
-Version: 1.0.0
-Cflags: 
-Libs: -L/catkin_ws/install/lib 
-Requires: 
