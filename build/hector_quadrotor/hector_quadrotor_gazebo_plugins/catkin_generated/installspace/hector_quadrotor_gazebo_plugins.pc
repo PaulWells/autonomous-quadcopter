@@ -1,8 +1,8 @@
-prefix=/home/greye/catkin_ws/install
+prefix=/catkin_ws/install
 
 Name: hector_quadrotor_gazebo_plugins
 Description: Description of hector_quadrotor_gazebo_plugins
 Version: 0.3.3
-Cflags: -I/home/greye/catkin_ws/install/include
-Libs: -L/home/greye/catkin_ws/install/lib 
+Cflags: -I/catkin_ws/install/include
+Libs: -L/catkin_ws/install/lib 
 Requires: roscpp hector_gazebo_plugins hector_quadrotor_model geometry_msgs hector_uav_msgs

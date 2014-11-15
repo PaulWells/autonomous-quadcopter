@@ -1,7 +1,7 @@
 # generated from genmsg/cmake/pkg-genmsg.context.in
 
 messages_str = ""
-services_str = "/home/greye/catkin_ws/src/tum_simulator/cvg_sim_gazebo_plugins/srv/SetBias.srv"
+services_str = "/catkin_ws/src/tum_simulator/cvg_sim_gazebo_plugins/srv/SetBias.srv"
 pkg_name = "cvg_sim_gazebo_plugins"
 dependencies_str = "geometry_msgs;nav_msgs;sensor_msgs;std_msgs"
 langs = "gencpp;genlisp;genpy"

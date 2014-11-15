@@ -1,8 +1,8 @@
-prefix=/home/greye/catkin_ws/install
+prefix=/catkin_ws/install
 
 Name: cvg_sim_msgs
 Description: Description of cvg_sim_msgs
 Version: 0.0.0
-Cflags: -I/home/greye/catkin_ws/install/include
-Libs: -L/home/greye/catkin_ws/install/lib 
+Cflags: -I/catkin_ws/install/include
+Libs: -L/catkin_ws/install/lib 
 Requires: message_runtime

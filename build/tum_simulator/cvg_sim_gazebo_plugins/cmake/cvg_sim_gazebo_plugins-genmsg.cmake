@@ -15,9 +15,9 @@ add_custom_target(cvg_sim_gazebo_plugins_generate_messages ALL)
 
 
 
-get_filename_component(_filename "/home/greye/catkin_ws/src/tum_simulator/cvg_sim_gazebo_plugins/srv/SetBias.srv" NAME_WE)
+get_filename_component(_filename "/catkin_ws/src/tum_simulator/cvg_sim_gazebo_plugins/srv/SetBias.srv" NAME_WE)
 add_custom_target(_cvg_sim_gazebo_plugins_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "cvg_sim_gazebo_plugins" "/home/greye/catkin_ws/src/tum_simulator/cvg_sim_gazebo_plugins/srv/SetBias.srv" "geometry_msgs/Vector3"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "cvg_sim_gazebo_plugins" "/catkin_ws/src/tum_simulator/cvg_sim_gazebo_plugins/srv/SetBias.srv" "geometry_msgs/Vector3"
 )
 
 #
@@ -29,7 +29,7 @@ add_custom_target(_cvg_sim_gazebo_plugins_generate_messages_check_deps_${_filena
 
 ### Generating Services
 _generate_srv_cpp(cvg_sim_gazebo_plugins
-  "/home/greye/catkin_ws/src/tum_simulator/cvg_sim_gazebo_plugins/srv/SetBias.srv"
+  "/catkin_ws/src/tum_simulator/cvg_sim_gazebo_plugins/srv/SetBias.srv"
   "${MSG_I_FLAGS}"
   "/opt/ros/indigo/share/geometry_msgs/cmake/../msg/Vector3.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/cvg_sim_gazebo_plugins
@@ -47,7 +47,7 @@ add_custom_target(cvg_sim_gazebo_plugins_generate_messages_cpp
 add_dependencies(cvg_sim_gazebo_plugins_generate_messages cvg_sim_gazebo_plugins_generate_messages_cpp)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/greye/catkin_ws/src/tum_simulator/cvg_sim_gazebo_plugins/srv/SetBias.srv" NAME_WE)
+get_filename_component(_filename "/catkin_ws/src/tum_simulator/cvg_sim_gazebo_plugins/srv/SetBias.srv" NAME_WE)
 add_dependencies(cvg_sim_gazebo_plugins_generate_messages_cpp _cvg_sim_gazebo_plugins_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -62,7 +62,7 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS cvg_sim_gazebo_plugins_generate_mes
 
 ### Generating Services
 _generate_srv_lisp(cvg_sim_gazebo_plugins
-  "/home/greye/catkin_ws/src/tum_simulator/cvg_sim_gazebo_plugins/srv/SetBias.srv"
+  "/catkin_ws/src/tum_simulator/cvg_sim_gazebo_plugins/srv/SetBias.srv"
   "${MSG_I_FLAGS}"
   "/opt/ros/indigo/share/geometry_msgs/cmake/../msg/Vector3.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/cvg_sim_gazebo_plugins
@@ -80,7 +80,7 @@ add_custom_target(cvg_sim_gazebo_plugins_generate_messages_lisp
 add_dependencies(cvg_sim_gazebo_plugins_generate_messages cvg_sim_gazebo_plugins_generate_messages_lisp)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/greye/catkin_ws/src/tum_simulator/cvg_sim_gazebo_plugins/srv/SetBias.srv" NAME_WE)
+get_filename_component(_filename "/catkin_ws/src/tum_simulator/cvg_sim_gazebo_plugins/srv/SetBias.srv" NAME_WE)
 add_dependencies(cvg_sim_gazebo_plugins_generate_messages_lisp _cvg_sim_gazebo_plugins_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -95,7 +95,7 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS cvg_sim_gazebo_plugins_generate_mes
 
 ### Generating Services
 _generate_srv_py(cvg_sim_gazebo_plugins
-  "/home/greye/catkin_ws/src/tum_simulator/cvg_sim_gazebo_plugins/srv/SetBias.srv"
+  "/catkin_ws/src/tum_simulator/cvg_sim_gazebo_plugins/srv/SetBias.srv"
   "${MSG_I_FLAGS}"
   "/opt/ros/indigo/share/geometry_msgs/cmake/../msg/Vector3.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/cvg_sim_gazebo_plugins
@@ -113,7 +113,7 @@ add_custom_target(cvg_sim_gazebo_plugins_generate_messages_py
 add_dependencies(cvg_sim_gazebo_plugins_generate_messages cvg_sim_gazebo_plugins_generate_messages_py)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/greye/catkin_ws/src/tum_simulator/cvg_sim_gazebo_plugins/srv/SetBias.srv" NAME_WE)
+get_filename_component(_filename "/catkin_ws/src/tum_simulator/cvg_sim_gazebo_plugins/srv/SetBias.srv" NAME_WE)
 add_dependencies(cvg_sim_gazebo_plugins_generate_messages_py _cvg_sim_gazebo_plugins_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility

@@ -1,8 +1,8 @@
-prefix=/home/greye/catkin_ws/devel
+prefix=/catkin_ws/devel
 
 Name: ardrone_autonomy
 Description: Description of ardrone_autonomy
 Version: 1.3.7
-Cflags: -I/home/greye/catkin_ws/devel/include
-Libs: -L/home/greye/catkin_ws/devel/lib 
+Cflags: -I/catkin_ws/devel/include
+Libs: -L/catkin_ws/devel/lib 
 Requires: roscpp image_transport message_runtime sensor_msgs std_srvs tf camera_info_manager
