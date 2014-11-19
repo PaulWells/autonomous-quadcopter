@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import rospy
 import pygame, pygame.font
-from std_msgs.msg import String, Header
+from std_msgs.msg import Empty, String, Header
 from sensor_msgs.msg import Range, Image 
 from geometry_msgs.msg import Twist, Vector3
 
@@ -31,7 +31,9 @@ def controller():
     rospy.Subscriber("range_front", Range, updateFrontRange)
     rospy.Subscriber("range_side", Range, updateSideRange)
     rospy.Subscriber("ardrone/front/image_raw", Image, updateImage)
-    pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
+    takeoffPub = rospy.Publisher('ardrone/takeoff', Empty, queue_size=10)
+    landPub = rospy.Publisher('ardrone/land', Empty, queue_size=10)
+    cmdPub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
     r = rospy.Rate(10) # 10hz
 
     pygameRunning = True
@@ -45,6 +47,11 @@ def controller():
         screen.fill((0, 0, 0))
 
         pressed = pygame.key.get_pressed()
+
+        if pressed[pygame.K_RETURN]:
+		takeoffPub.publish(Empty())
+        if pressed[pygame.K_RSHIFT]:
+		landPub.publish(Empty())
 
         linearVector = Vector3(0, 0, 0)
 
@@ -61,7 +68,7 @@ def controller():
         if pressed[pygame.K_d]: angularVector.z -= 1
 
         cmd = Twist(linearVector, angularVector)
-        pub.publish(cmd)
+        cmdPub.publish(cmd)
 
         if frontRange:
             screen.blit(font.render("Front Range = "
