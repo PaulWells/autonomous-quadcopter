@@ -13,4 +13,5 @@
 
   <node name="distance_rerouter" pkg="ardrone_control" type="distance_rerouter"/>
   <node name="control_data_synchronizer" pkg="ardrone_control" type="control_data_synchronizer"/>
+  <node name="controller" pkg="ardrone_control" type="controller"/>
 </launch>

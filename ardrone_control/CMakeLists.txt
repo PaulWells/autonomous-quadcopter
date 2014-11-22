@@ -117,6 +117,10 @@ add_dependencies(distance_rerouter ardrone_control_generate_messages_cpp)
 add_executable(control_data_synchronizer src/control_data_synchronizer.cpp src/ControlDataCollector.cpp)
 target_link_libraries(control_data_synchronizer ${catkin_LIBRARIES})
 add_dependencies(control_data_synchronizer ardrone_control_generate_messages_cpp)
+
+add_executable(controller src/controller.cpp src/ControllerLogic.cpp)
+target_link_libraries(controller ${catkin_LIBRARIES})
+add_dependencies(controller ardrone_control_generate_messages_cpp)
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(ardrone_control_node ardrone_control_generate_messages_cpp)
