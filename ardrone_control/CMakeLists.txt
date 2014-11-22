@@ -12,6 +12,8 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
 )
 
+find_package(ardrone_autonomy REQUIRED)
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -49,6 +51,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
     FILES
     Distances.msg
+    ControlData.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -69,6 +72,7 @@ generate_messages(
   DEPENDENCIES
   std_msgs
   sensor_msgs
+  ardrone_autonomy  
 )
 
 ###################################
@@ -83,8 +87,9 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES ardrone_control
-   CATKIN_DEPENDS message_runtime roscpp rospy std_msgs sensor_msgs
+   CATKIN_DEPENDS message_runtime roscpp rospy std_msgs sensor_msgs ardrone_autonomy
 #  DEPENDS system_lib
+   
 )
 
 ###########
@@ -109,6 +114,9 @@ add_executable(distance_rerouter src/distance_rerouter.cpp src/RangeDataCollecto
 target_link_libraries(distance_rerouter ${catkin_LIBRARIES})
 add_dependencies(distance_rerouter ardrone_control_generate_messages_cpp)
 
+add_executable(control_data_synchronizer src/control_data_synchronizer.cpp src/ControlDataCollector.cpp)
+target_link_libraries(control_data_synchronizer ${catkin_LIBRARIES})
+add_dependencies(control_data_synchronizer ardrone_control_generate_messages_cpp)
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(ardrone_control_node ardrone_control_generate_messages_cpp)

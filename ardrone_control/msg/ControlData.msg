@@ -1,0 +1,17 @@
+Distances distances
+float32 batteryPercent
+uint32 state
+int32 magX
+int32 magY
+int32 magZ
+float32 rotX
+float32 rotY
+float32 rotZ
+int32 altd
+float32 vx
+float32 vy
+float32 vz
+float32 ax
+float32 ay
+float32 az
+float32 tm
