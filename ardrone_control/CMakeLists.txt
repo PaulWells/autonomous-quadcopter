@@ -105,7 +105,7 @@ include_directories(
 
 ## Declare a cpp executable
 # add_executable(ardrone_control_node src/ardrone_control_node.cpp)
-add_executable(distance_rerouter src/distance_rerouter.cpp)
+add_executable(distance_rerouter src/distance_rerouter.cpp src/RangeDataCollector.cpp)
 target_link_libraries(distance_rerouter ${catkin_LIBRARIES})
 add_dependencies(distance_rerouter ardrone_control_generate_messages_cpp)
 
