@@ -16,4 +16,5 @@ class ControllerLogic{
     ros::Publisher twist_pub;
     ros::Publisher takeoff_pub;
     ros::Publisher land_pub;
+    double last_command_time;
 };
