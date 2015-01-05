@@ -4,7 +4,7 @@
 
 class ControllerLogic{
 
-    enum State {ON_GROUND, TAKING_OFF, HOVERING, APPROACHING_WALL, AT_CORNER, TURNING, WALL_TRACKING,LANDING};
+    enum State {ON_GROUND, TAKING_OFF, HOVERING, APPROACHING_WALL, AT_CORNER, TURNING, TURN_SETTLING, WALL_TRACKING,LANDING};
 
     public:
     ControllerLogic(const ros::Publisher& twist_pub, const ros::Publisher& takeoff_pub, const ros::Publisher& land_pub);
@@ -21,8 +21,11 @@ class ControllerLogic{
     ros::Publisher takeoff_pub;
     ros::Publisher land_pub;
     double last_command_time;
-    double kp;
+    double kp_linear;
+    double kp_angular;
     double desired_wall_distance;
     double wall_distance_tolerance;
     double starting_rotZ;
+    double finish_turn_time;
+    double turn_settling_time;
 };

@@ -13,9 +13,11 @@ ControllerLogic::ControllerLogic(const ros::Publisher& twist_pub, const ros::Pub
     this->land_pub = land_pub;
     this->state = ON_GROUND;
     this->last_command_time = 0;
-    this->kp = 0.5;
+    this->kp_linear = 0.5;
+    this->kp_angular = 0.05;
     this->desired_wall_distance =0.9; 
     this->wall_distance_tolerance = 0.2;
+    this->turn_settling_time = 1.0;
 }
 
 void ControllerLogic::update(const ardrone_control::ControlData data)
@@ -32,20 +34,20 @@ void ControllerLogic::update_state(const ardrone_control::ControlData data)
 geometry_msgs::Twist ControllerLogic::addLinearX(geometry_msgs::Twist msg, const ardrone_control::ControlData data)
 {
     double wall_distance = data.distances.forward_sensor;
-    msg.linear.x = (wall_distance - this->desired_wall_distance)*kp;
+    msg.linear.x = (wall_distance - this->desired_wall_distance)*this->kp_linear;
     return msg;
 }
 
 geometry_msgs::Twist ControllerLogic::addLinearY(geometry_msgs::Twist msg, const ardrone_control::ControlData data)
 {
     double wall_distance = data.distances.right_sensor;
-    msg.linear.y = (wall_distance - this->desired_wall_distance)* kp;
+    msg.linear.y = (wall_distance - this->desired_wall_distance)* this->kp_linear;
     return msg;
 }
 
 geometry_msgs::Twist ControllerLogic::addAngularZ(geometry_msgs::Twist msg, double turn_distance)
 {
-   msg.angular.z = -1 * (turn_distance - 90)*kp;
+   msg.angular.z = -1 * (turn_distance - 90) * this->kp_angular;
    return msg; 
 }
     
@@ -125,11 +127,12 @@ void ControllerLogic::respond(const ardrone_control::ControlData data)
         case TURNING:
         {
             double turn_distance = fabs(this->starting_rotZ - data.rotZ);
-            if(turn_distance >= 90) 
+            ROS_INFO("turn_distance: %f", turn_distance);
+            if(turn_distance >= 88) 
             {
-                twist_msg.angular.z = 0;
-                state = WALL_TRACKING;
-                ROS_INFO("state equals WALL_TRACKING");
+                state = TURN_SETTLING;
+                this->finish_turn_time = time;
+                ROS_INFO("state equals TURN_SETTLING");
             }
             else
             {
@@ -138,6 +141,22 @@ void ControllerLogic::respond(const ardrone_control::ControlData data)
             twist_pub.publish(twist_msg);
             break;
         }
+        case TURN_SETTLING:
+        {
+            double turn_distance = fabs(this->starting_rotZ - data.rotZ);
+            if(fabs(time - this->finish_turn_time) < this->turn_settling_time)
+            {
+                ROS_INFO("time passed %f", fabs(time - this->finish_turn_time));
+                twist_msg = addAngularZ(twist_msg, turn_distance);
+            }
+            else
+            {
+                twist_msg.angular.z = 0;
+                state = WALL_TRACKING;
+                ROS_INFO("state equals WALL_TRACKING");
+            }
+            twist_pub.publish(twist_msg);
+        }    
         case LANDING:
         {
             if(fabs(data.vz) <0.2 && elapsed_time > 0)
