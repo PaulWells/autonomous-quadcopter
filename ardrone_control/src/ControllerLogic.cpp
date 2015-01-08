@@ -13,41 +13,47 @@ ControllerLogic::ControllerLogic(const ros::Publisher& twist_pub, const ros::Pub
     this->land_pub = land_pub;
     this->state = ON_GROUND;
     this->last_command_time = 0;
-    this->kp_linear = 0.5;
-    this->kp_angular = 0.05;
-    this->desired_wall_distance =0.9; 
-    this->wall_distance_tolerance = 0.2;
-    this->turn_settling_time = 1.0;
+    this->kp_approach_wall = 4.0;
+    this->kp_tracking_speed = 0.6;
+    this->kp_wall_distance = 3.0;
+    this->kp_angular = 8.0;
+    this->desired_wall_distance_front =0.8; 
+    this->desired_wall_distance_side = 0.4;
+    this->wall_distance_tolerance = 0.1;
+    this->front_sensor_angle = 90;
 }
 
 void ControllerLogic::update(const ardrone_control::ControlData data)
 {
-    update_state(data);
     respond(data);
 }
 
-void ControllerLogic::update_state(const ardrone_control::ControlData data)
+double ControllerLogic::getForwardDistance(double sensor_distance)
 {
-    return; //Placeholder
+    return sensor_distance * cos(this->front_sensor_angle/2 * M_PI / 180);
 }
 
-geometry_msgs::Twist ControllerLogic::addLinearX(geometry_msgs::Twist msg, const ardrone_control::ControlData data)
+geometry_msgs::Twist ControllerLogic::addLinearX(geometry_msgs::Twist msg, const ardrone_control::ControlData data, double kp)
 {
-    double wall_distance = data.distances.forward_sensor;
-    msg.linear.x = (wall_distance - this->desired_wall_distance)*this->kp_linear;
+    double front_left_sensor_distance = getForwardDistance(data.distances.front_left_sensor);
+    double front_right_sensor_distance = getForwardDistance(data.distances.front_right_sensor);
+    double wall_distance = (front_left_sensor_distance + front_right_sensor_distance)/2;
+    msg.linear.x = (wall_distance - this->desired_wall_distance_front)*kp;
     return msg;
 }
 
 geometry_msgs::Twist ControllerLogic::addLinearY(geometry_msgs::Twist msg, const ardrone_control::ControlData data)
 {
-    double wall_distance = data.distances.right_sensor;
-    msg.linear.y = (wall_distance - this->desired_wall_distance)* this->kp_linear;
+    double wall_distance = data.distances.side_sensor;
+    msg.linear.y = (wall_distance - this->desired_wall_distance_side)* this->kp_tracking_speed;
     return msg;
 }
 
-geometry_msgs::Twist ControllerLogic::addAngularZ(geometry_msgs::Twist msg, double turn_distance)
+geometry_msgs::Twist ControllerLogic::addAngularZ(geometry_msgs::Twist msg, const ardrone_control::ControlData data)
 {
-   msg.angular.z = -1 * (turn_distance - 90) * this->kp_angular;
+   double front_left_sensor_distance = getForwardDistance(data.distances.front_left_sensor);
+   double front_right_sensor_distance = getForwardDistance(data.distances.front_right_sensor);
+   msg.angular.z = -1 * (front_left_sensor_distance - front_right_sensor_distance) * this->kp_angular;
    return msg; 
 }
     
@@ -87,12 +93,12 @@ void ControllerLogic::respond(const ardrone_control::ControlData data)
         }
         case APPROACHING_WALL:
         {
-            wall_distance = data.distances.forward_sensor;
-            twist_msg = addLinearX(twist_msg,data);
+            wall_distance = getForwardDistance(data.distances.front_left_sensor);
+            twist_msg = addLinearX(twist_msg,data, this->kp_approach_wall);
             twist_pub.publish(twist_msg);
-            ROS_INFO("wall distance %f, desired wall distance: %f",wall_distance,desired_wall_distance);
-            ROS_INFO("wall difference %f", fabs(wall_distance - desired_wall_distance));
-            if(fabs(wall_distance - desired_wall_distance) < wall_distance_tolerance)
+            ROS_INFO("wall distance %f, desired wall distance: %f",wall_distance,desired_wall_distance_front);
+            ROS_INFO("wall difference %f", fabs(wall_distance - desired_wall_distance_front));
+            if(fabs(wall_distance - desired_wall_distance_front) < wall_distance_tolerance)
             {
                 state = WALL_TRACKING;
                 ROS_INFO("state equals WALL_TRACKING");
@@ -101,68 +107,12 @@ void ControllerLogic::respond(const ardrone_control::ControlData data)
         }
         case WALL_TRACKING:
         {
-            wall_distance = data.distances.right_sensor;
-            twist_msg = addLinearX(twist_msg, data);
+            wall_distance = data.distances.side_sensor;
+            twist_msg = addLinearX(twist_msg, data, this->kp_wall_distance);
             twist_msg = addLinearY(twist_msg, data);
+            twist_msg = addAngularZ(twist_msg, data);
             twist_pub.publish(twist_msg);
 
-            if(fabs(wall_distance - desired_wall_distance) < wall_distance_tolerance)
-            {
-                state = AT_CORNER;
-                ROS_INFO("state equals AT_CORNER");
-            }
-
-            break;
-        }
-        case AT_CORNER:
-        {
-            twist_msg.linear.x = 0;
-            twist_msg.linear.y = 0;
-            twist_pub.publish(twist_msg);
-            state = TURNING;
-            ROS_INFO("state equals TURNING");
-            this->starting_rotZ = data.rotZ;
-            break;
-        }
-        case TURNING:
-        {
-            double turn_distance = fabs(this->starting_rotZ - data.rotZ);
-            ROS_INFO("turn_distance: %f", turn_distance);
-            if(turn_distance >= 88) 
-            {
-                state = TURN_SETTLING;
-                this->finish_turn_time = time;
-                ROS_INFO("state equals TURN_SETTLING");
-            }
-            else
-            {
-                twist_msg = addAngularZ(twist_msg,turn_distance);
-            }
-            twist_pub.publish(twist_msg);
-            break;
-        }
-        case TURN_SETTLING:
-        {
-            double turn_distance = fabs(this->starting_rotZ - data.rotZ);
-            if(fabs(time - this->finish_turn_time) < this->turn_settling_time)
-            {
-                ROS_INFO("time passed %f", fabs(time - this->finish_turn_time));
-                twist_msg = addAngularZ(twist_msg, turn_distance);
-            }
-            else
-            {
-                twist_msg.angular.z = 0;
-                state = WALL_TRACKING;
-                ROS_INFO("state equals WALL_TRACKING");
-            }
-            twist_pub.publish(twist_msg);
-        }    
-        case LANDING:
-        {
-            if(fabs(data.vz) <0.2 && elapsed_time > 0)
-            {
-                state = ON_GROUND;
-            }
             break;
         }
     }
