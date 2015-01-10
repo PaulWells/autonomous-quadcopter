@@ -13,11 +13,11 @@ ControllerLogic::ControllerLogic(const ros::Publisher& twist_pub, const ros::Pub
     this->land_pub = land_pub;
     this->state = ON_GROUND;
     this->last_command_time = 0;
-    this->kp_approach_wall = 4.0;
+    this->kp_approach_wall = 2.0;
     this->kp_tracking_speed = 0.6;
     this->kp_wall_distance = 3.0;
     this->kp_angular = 8.0;
-    this->desired_wall_distance_front =0.8; 
+    this->desired_wall_distance_front =0.6; 
     this->desired_wall_distance_side = 0.4;
     this->wall_distance_tolerance = 0.1;
     this->front_sensor_angle = 90;
