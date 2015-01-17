@@ -10,6 +10,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   message_generation
   sensor_msgs
+  cv_bridge
+  image_transport
 )
 
 find_package(ardrone_autonomy REQUIRED)
@@ -121,6 +123,10 @@ add_dependencies(control_data_synchronizer ardrone_control_generate_messages_cpp
 add_executable(controller src/controller.cpp src/ControllerLogic.cpp)
 target_link_libraries(controller ${catkin_LIBRARIES})
 add_dependencies(controller ardrone_control_generate_messages_cpp)
+
+add_executable(image_processor src/image_processor.cpp src/ImageConverter.cpp)
+target_link_libraries(image_processor ${catkin_LIBRARIES})
+add_dependencies(image_processor ardrone_control_generate_messages_cpp)
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(ardrone_control_node ardrone_control_generate_messages_cpp)

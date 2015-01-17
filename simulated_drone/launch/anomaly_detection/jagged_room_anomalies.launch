@@ -2,7 +2,7 @@
 <launch>
   <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find simulated_drone)/worlds/autonomous_flight/complex_room.world"/>
+    <arg name="world_name" value="$(find simulated_drone)/worlds/anomaly_detection/jagged_room.world"/>
   </include>
 
 
