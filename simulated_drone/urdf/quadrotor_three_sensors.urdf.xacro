@@ -32,8 +32,8 @@ xmlns:xacro="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface">
       <origin xyz="0.21 -0.24 0.027" rpy="0 0 ${-1*FRONT_SENSOR_ANGLE/2*M_PI/180}"/>
     </xacro:sonar_sensor>
     <include filename="$(find cvg_sim_gazebo)/urdf/sensors/sonar_sensor.urdf.xacro" />
-    <xacro:sonar_sensor name="r_side" parent="base_link" ros_topic="range_side" update_rate="10" min_range="0.2" max_range="1.5" field_of_view="${40*M_PI/180}" ray_count="3">
-      <origin xyz="0.0 0.24 0.027" rpy="0 0 ${90*M_PI/180}"/>
+    <xacro:sonar_sensor name="r_front" parent="base_link" ros_topic="range_front" update_rate="10" min_range="0.2" max_range="1.5" field_of_view="${40*M_PI/180}" ray_count="3">
+      <origin xyz="0.21 0.0 0.027" rpy="0 0 ${0*M_PI/180}"/>
     </xacro:sonar_sensor>
 
 

@@ -24,11 +24,11 @@ void RangeDataCollector::rangeFrontRightCallback(const sensor_msgs::Range dist)
     sendDataIfReady();
 }
 
-void RangeDataCollector::rangeSideCallback(const sensor_msgs::Range dist)
+void RangeDataCollector::rangeFrontCallback(const sensor_msgs::Range dist)
 {
-    combined_dist.side_sensor = dist.range;
+    combined_dist.front_sensor = dist.range;
     combined_dist.header = dist.header;
-    side_present = true;
+    front_present = true;
     sendDataIfReady();
 }
 
@@ -36,12 +36,12 @@ void RangeDataCollector::rangeSideCallback(const sensor_msgs::Range dist)
 
 void RangeDataCollector::sendDataIfReady()
 {
-    if(front_left_present && front_right_present && side_present)
+    if(front_left_present && front_right_present && front_present)
     {
         pub.publish(combined_dist);
         front_left_present = false;
         front_right_present = false;
-        side_present = false;
+        front_present = false;
     }
 }
 
