@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find simulated_drone)/worlds/anomaly_detection/simple_room.world"/>
+  </include>
+
+
+  <!-- Spawn simulated quadrotor uav -->
+  <include file="$(find simulated_drone)/launch/modified_drone.launch" >
+    <arg name="model" value="$(find simulated_drone)/urdf/quadrotor_three_sensors.urdf.xacro"/> 
+  </include>
+
+</launch>
