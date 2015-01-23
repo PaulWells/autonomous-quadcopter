@@ -1,4 +1,4 @@
 Header header
-float32 side_sensor
+float32 front_sensor
 float32 front_left_sensor
 float32 front_right_sensor
