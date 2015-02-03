@@ -13,8 +13,11 @@ int main(int argc, char **argv)
     ControlDataCollector collector(pub);
     ros::Subscriber range_data_sub = n.subscribe("/xbee/proximity_data", 10, &ControlDataCollector::rangeDataCallback, &collector);
     ros::Subscriber navdata_sub = n.subscribe("/ardrone/navdata", 10, &ControlDataCollector::navDataCallback, &collector);
-    ros::Rate loop_rate(10); //arbitrary loop rate
-    
-    ros::spin();
+    ros::Rate loop_rate(5); 
+    while(ros::ok())
+    {
+        ros::spinOnce();
+        loop_rate.sleep();
+    }
     return 0;
 }
