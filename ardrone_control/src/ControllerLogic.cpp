@@ -16,7 +16,7 @@ ControllerLogic::ControllerLogic(const ros::Publisher& twist_pub, const ros::Pub
     this->kp_tracking_speed = 0.0;
     this->kp_wall_distance = 0.06;
     this->kp_angular = 0.1;
-    this->desired_wall_distance_front = 0.8; 
+    this->desired_wall_distance_front = 0.9; 
     this->desired_wall_distance_side = 0.4;
     this->wall_distance_tolerance = 0.01;
     this->front_sensor_angle = 90;
@@ -109,7 +109,6 @@ void ControllerLogic::respond(const ardrone_control::ControlData data)
         }
         case WALL_TRACKING:
         {
-						land_pub.publish(empty_msg);
             twist_msg = addLinearX(twist_msg, data, this->kp_wall_distance);
             twist_msg = addLinearY(twist_msg, data);
             twist_msg = addAngularZ(twist_msg, data);

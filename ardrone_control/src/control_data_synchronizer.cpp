@@ -11,8 +11,8 @@ int main(int argc, char **argv)
     ros::Publisher pub = n.advertise<ardrone_control::ControlData>("/ardrone_control/data",10);
     
     ControlDataCollector collector(pub);
-    ros::Subscriber range_data_sub = n.subscribe("/xbee/proximity_data", 10, &ControlDataCollector::rangeDataCallback, &collector);
-    ros::Subscriber navdata_sub = n.subscribe("/ardrone/navdata", 10, &ControlDataCollector::navDataCallback, &collector);
+    ros::Subscriber range_data_sub = n.subscribe("/xbee/proximity_data", 1, &ControlDataCollector::rangeDataCallback, &collector);
+    ros::Subscriber navdata_sub = n.subscribe("/ardrone/navdata", 1, &ControlDataCollector::navDataCallback, &collector);
     ros::Rate loop_rate(5); 
     while(ros::ok())
     {

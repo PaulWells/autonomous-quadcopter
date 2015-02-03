@@ -14,7 +14,7 @@ int main(int argc, char **argv)
     ros::Publisher takeoff_pub = n.advertise<std_msgs::Empty>("ardrone/takeoff",10);
     ros::Publisher land_pub = n.advertise<std_msgs::Empty>("ardrone/land",10);
     ControllerLogic control(twist_pub,takeoff_pub,land_pub);
-    ros::Subscriber sub = n.subscribe("/ardrone_control/data", 10, &ControllerLogic::update, &control);
+    ros::Subscriber sub = n.subscribe("/ardrone_control/data", 1, &ControllerLogic::update, &control);
     
     ros::Rate loop_rate(5);
     while(ros::ok())
