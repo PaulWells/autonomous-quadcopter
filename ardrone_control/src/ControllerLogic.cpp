@@ -13,9 +13,9 @@ ControllerLogic::ControllerLogic(const ros::Publisher& twist_pub, const ros::Pub
     this->land_pub = land_pub;
     this->state = ON_GROUND;
     this->kp_approach_wall = 0.06;
-    this->kd_approach_wall = 0.02;
-    this->kp_tracking_speed = 0.0;
-    this->kp_wall_distance = 0.06;
+    this->kd_approach_wall = 0.22;
+    this->kp_tracking_speed = 0.04;
+    this->kp_wall_distance = 0.05;
     this->kp_angular = 0.1;
     this->desired_wall_distance_front = 0.9; 
     this->desired_wall_distance_side = 0.4;
@@ -55,8 +55,10 @@ geometry_msgs::Twist ControllerLogic::addPDX(geometry_msgs::Twist msg, const ard
     double wall_distance = data.distances.front_sensor;
     double error = (wall_distance - this->desired_wall_distance_front);
     double proportional =  error*kp;
-    double derivative = (this->last_approach_wall_error - error)*kd;
-    msg.linear.x = proportional + derivative;
+    double derivative = (error - this->last_approach_wall_error)*kd;
+		
+		msg.linear.x = proportional + derivative;			
+    
     this->last_approach_wall_error = error;
     return msg;
 }
@@ -65,7 +67,7 @@ geometry_msgs::Twist ControllerLogic::addLinearY(geometry_msgs::Twist msg, const
 {
     //double wall_distance = data.distances.side_sensor;
     //msg.linear.y = (wall_distance - this->desired_wall_distance_side)* this->kp_tracking_speed;
-    msg.linear.y = 0;
+    msg.linear.y = 0.01;
     return msg;
 }
 
