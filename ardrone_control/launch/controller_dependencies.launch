@@ -1,0 +1,6 @@
+<launch>
+	<node name="distance_rerouter" pkg="ardrone_control" type="distance_rerouter"/>
+  <node name="control_data_synchronizer" pkg="ardrone_control" type="control_data_synchronizer"/>
+  <node name="ardrone_driver" pkg="ardrone_autonomy" type="ardrone_driver"/>
+  <node name="image_processor" pkg="ardrone_control" type="image_processor"/>
+</launch>

@@ -20,6 +20,7 @@ void ControlDataCollector::rangeDataCallback(const ardrone_control::Distances di
 
 void ControlDataCollector::navDataCallback(const ardrone_autonomy::Navdata navdata)
 {
+    combined_data.header = navdata.header;
     combined_data.batteryPercent = navdata.batteryPercent;
     combined_data.state = navdata.state;
     combined_data.magX = navdata.magX;

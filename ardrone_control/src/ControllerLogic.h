@@ -20,7 +20,7 @@ class ControllerLogic{
     ros::Publisher twist_pub;
     ros::Publisher takeoff_pub;
     ros::Publisher land_pub;
-    double last_command_time;
+    ros::Time start_time;
     double kp_wall_distance;
     double kp_approach_wall;
     double kp_tracking_speed;

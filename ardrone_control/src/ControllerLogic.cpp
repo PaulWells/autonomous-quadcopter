@@ -12,14 +12,13 @@ ControllerLogic::ControllerLogic(const ros::Publisher& twist_pub, const ros::Pub
     this->takeoff_pub = takeoff_pub;
     this->land_pub = land_pub;
     this->state = ON_GROUND;
-    this->last_command_time = 0;
-    this->kp_approach_wall = 2.0;
-    this->kp_tracking_speed = 0.6;
-    this->kp_wall_distance = 3.0;
-    this->kp_angular = 8.0;
-    this->desired_wall_distance_front =0.6; 
+    this->kp_approach_wall = 0.03;
+    this->kp_tracking_speed = 0.0;
+    this->kp_wall_distance = 0.03;
+    this->kp_angular = 0.1;
+    this->desired_wall_distance_front = 1.0; 
     this->desired_wall_distance_side = 0.4;
-    this->wall_distance_tolerance = 0.1;
+    this->wall_distance_tolerance = 0.01;
     this->front_sensor_angle = 90;
 }
 
@@ -35,24 +34,24 @@ double ControllerLogic::getForwardDistance(double sensor_distance)
 
 geometry_msgs::Twist ControllerLogic::addLinearX(geometry_msgs::Twist msg, const ardrone_control::ControlData data, double kp)
 {
-    double front_left_sensor_distance = getForwardDistance(data.distances.front_left_sensor);
-    double front_right_sensor_distance = getForwardDistance(data.distances.front_right_sensor);
-    double wall_distance = (front_left_sensor_distance + front_right_sensor_distance)/2;
+    double wall_distance = data.distances.front_sensor;
     msg.linear.x = (wall_distance - this->desired_wall_distance_front)*kp;
     return msg;
 }
 
 geometry_msgs::Twist ControllerLogic::addLinearY(geometry_msgs::Twist msg, const ardrone_control::ControlData data)
 {
-    double wall_distance = data.distances.side_sensor;
-    msg.linear.y = (wall_distance - this->desired_wall_distance_side)* this->kp_tracking_speed;
+    //double wall_distance = data.distances.side_sensor;
+    //msg.linear.y = (wall_distance - this->desired_wall_distance_side)* this->kp_tracking_speed;
+    msg.linear.y = 0;
     return msg;
 }
 
 geometry_msgs::Twist ControllerLogic::addAngularZ(geometry_msgs::Twist msg, const ardrone_control::ControlData data)
 {
-   double front_left_sensor_distance = getForwardDistance(data.distances.front_left_sensor);
-   double front_right_sensor_distance = getForwardDistance(data.distances.front_right_sensor);
+   double front_left_sensor_distance = data.distances.front_left_sensor;
+   double front_right_sensor_distance = data.distances.front_right_sensor;
+
    msg.angular.z = -1 * (front_left_sensor_distance - front_right_sensor_distance) * this->kp_angular;
    return msg; 
 }
@@ -61,8 +60,8 @@ geometry_msgs::Twist ControllerLogic::addAngularZ(geometry_msgs::Twist msg, cons
 void ControllerLogic::respond(const ardrone_control::ControlData data)
 {
 
-    double time = data.distances.header.stamp.toSec();
-    double elapsed_time = time - last_command_time; 
+    ros::Time current_time = data.header.stamp;
+    ros::Duration elapsed_time = current_time - start_time; 
     std_msgs::Empty empty_msg;
     geometry_msgs::Twist twist_msg;
     double wall_distance;
@@ -70,14 +69,16 @@ void ControllerLogic::respond(const ardrone_control::ControlData data)
     {
         case ON_GROUND:
         {
+						ROS_INFO("Taking off");
             takeoff_pub.publish(empty_msg);
             state = TAKING_OFF;
-            last_command_time = time;
+            start_time = current_time;
             break;
         }
         case TAKING_OFF:
         {
-            if(fabs(data.vz) < 0.2 && elapsed_time > 0) 
+						ROS_INFO("Time is %f", elapsed_time.toSec());
+            if(elapsed_time.toSec() > 5) 
             {
                 state = HOVERING;
                 ROS_INFO("state equals HOVERING");
@@ -88,17 +89,18 @@ void ControllerLogic::respond(const ardrone_control::ControlData data)
         {
             state = APPROACHING_WALL;
             ROS_INFO("state equals APPROACHING_WALL");
-            last_command_time = time;
             break;
         }
         case APPROACHING_WALL:
         {
-            wall_distance = getForwardDistance(data.distances.front_left_sensor);
+            wall_distance = data.distances.front_sensor;
             twist_msg = addLinearX(twist_msg,data, this->kp_approach_wall);
             twist_pub.publish(twist_msg);
             ROS_INFO("wall distance %f, desired wall distance: %f",wall_distance,desired_wall_distance_front);
-            ROS_INFO("wall difference %f", fabs(wall_distance - desired_wall_distance_front));
-            if(fabs(wall_distance - desired_wall_distance_front) < wall_distance_tolerance)
+						//ROS_INFO("right sensor %f", data.distances.front_right_sensor);
+						//ROS_INFO("left sensor %f", data.distances.front_left_sensor);
+            //ROS_INFO("wall difference %f", fabs(wall_distance - desired_wall_distance_front));
+            if(wall_distance - desired_wall_distance_front < wall_distance_tolerance)
             {
                 state = WALL_TRACKING;
                 ROS_INFO("state equals WALL_TRACKING");
@@ -107,7 +109,6 @@ void ControllerLogic::respond(const ardrone_control::ControlData data)
         }
         case WALL_TRACKING:
         {
-            wall_distance = data.distances.side_sensor;
             twist_msg = addLinearX(twist_msg, data, this->kp_wall_distance);
             twist_msg = addLinearY(twist_msg, data);
             twist_msg = addAngularZ(twist_msg, data);

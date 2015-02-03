@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "ros/msg.h"
+#include "std_msgs/Header.h"
 #include "ardrone_control/Distances.h"
 
 namespace ardrone_control
@@ -13,6 +14,7 @@ namespace ardrone_control
   class ControlData : public ros::Msg
   {
     public:
+      std_msgs::Header header;
       ardrone_control::Distances distances;
       float batteryPercent;
       uint32_t state;
@@ -34,6 +36,7 @@ namespace ardrone_control
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
+      offset += this->header.serialize(outbuffer + offset);
       offset += this->distances.serialize(outbuffer + offset);
       union {
         float real;
@@ -196,6 +199,7 @@ namespace ardrone_control
     virtual int deserialize(unsigned char *inbuffer)
     {
       int offset = 0;
+      offset += this->header.deserialize(inbuffer + offset);
       offset += this->distances.deserialize(inbuffer + offset);
       union {
         float real;
@@ -371,7 +375,7 @@ namespace ardrone_control
     }
 
     const char * getType(){ return "ardrone_control/ControlData"; };
-    const char * getMD5(){ return "86b9e73fcf90827c7a1b5668d12a84e2"; };
+    const char * getMD5(){ return "632ea9ddccdab1daddb4d407ab6adb26"; };
 
   };
 
