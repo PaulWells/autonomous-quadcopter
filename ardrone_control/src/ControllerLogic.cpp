@@ -13,6 +13,7 @@ ControllerLogic::ControllerLogic(const ros::Publisher& twist_pub, const ros::Pub
     this->land_pub = land_pub;
     this->state = ON_GROUND;
     this->kp_approach_wall = 0.06;
+    this->kd_approach_wall = 0.02;
     this->kp_tracking_speed = 0.0;
     this->kp_wall_distance = 0.06;
     this->kp_angular = 0.1;
@@ -20,10 +21,20 @@ ControllerLogic::ControllerLogic(const ros::Publisher& twist_pub, const ros::Pub
     this->desired_wall_distance_side = 0.4;
     this->wall_distance_tolerance = 0.01;
     this->front_sensor_angle = 90;
+    this->distance_history_size = 5;
+    for(int i = 0; i < this->distance_history_size; i++){
+        this->distance_history_front_left[i] = 0;
+        this->distance_history_front_right[i] = 0;
+        this->distance_history_front[i] = 0;
+    }
+    this->iteration_number = 0;
+    this->last_approach_wall_error = 1.54 - this->desired_wall_distance_front;
 }
 
-void ControllerLogic::update(const ardrone_control::ControlData data)
+void ControllerLogic::update(ardrone_control::ControlData data)
 {
+    this->iteration_number++;
+    //smoothDistances(data);
     respond(data);
 }
 
@@ -36,6 +47,17 @@ geometry_msgs::Twist ControllerLogic::addLinearX(geometry_msgs::Twist msg, const
 {
     double wall_distance = data.distances.front_sensor;
     msg.linear.x = (wall_distance - this->desired_wall_distance_front)*kp;
+    return msg;
+}
+
+geometry_msgs::Twist ControllerLogic::addPDX(geometry_msgs::Twist msg, const ardrone_control::ControlData data, double kp, double kd)
+{
+    double wall_distance = data.distances.front_sensor;
+    double error = (wall_distance - this->desired_wall_distance_front);
+    double proportional =  error*kp;
+    double derivative = (this->last_approach_wall_error - error)*kd;
+    msg.linear.x = proportional + derivative;
+    this->last_approach_wall_error = error;
     return msg;
 }
 
@@ -55,9 +77,64 @@ geometry_msgs::Twist ControllerLogic::addAngularZ(geometry_msgs::Twist msg, cons
    msg.angular.z = -1 * (front_left_sensor_distance - front_right_sensor_distance) * this->kp_angular;
    return msg; 
 }
-    
 
-void ControllerLogic::respond(const ardrone_control::ControlData data)
+void ControllerLogic::smoothDistances(ardrone_control::ControlData& data)
+{
+    data.distances.front_left_sensor = smooth(data.distances.front_left_sensor, this->distance_history_front_left);
+    data.distances.front_right_sensor = smooth(data.distances.front_right_sensor, this->distance_history_front_right);
+    data.distances.front_sensor = smooth(data.distances.front_sensor, this->distance_history_front);
+}
+
+// Assumes the number of items in history is odd
+// Finds median of the distances in the history and updates the history
+double ControllerLogic::smooth(double distance, double history[])
+{
+    // Wait for history to fill up first
+    if(this->iteration_number < this->distance_history_size)
+    {
+        return distance;
+    }
+    
+    int current_index = this->iteration_number % this->distance_history_size;
+    history[current_index] = distance;
+    
+    for(int i = 0; i < this->distance_history_size; i++)
+    {
+        int num_above = 0;
+        int num_below = 0;
+        int num_equal = 0;
+        double current_distance = history[i];
+        for(int j=0; j < this->distance_history_size; j++)
+        {
+            if(history[j] < current_distance)
+            {
+                num_below++;
+            }
+            else if(history[j] > current_distance)
+            {
+                num_above++;
+            }
+            else if(history[j] == current_distance && j != i)
+            {
+                num_equal++;
+            }
+        }
+        
+        // Condition for if current distance is the median
+        if(abs(num_above - num_below) <= num_equal)
+        {       
+            for(int i = 0; i < this->distance_history_size; i++)
+            {
+                ROS_INFO("item at %d: %f", i, history[i]);
+            }
+            ROS_INFO("median is %f", current_distance);  
+            return current_distance; 
+        }
+    }
+    ROS_INFO("NO MEDIAN WAS CHOSEN!!!!");
+}    
+
+void ControllerLogic::respond(const ardrone_control::ControlData& data)
 {
 
     ros::Time current_time = data.header.stamp;
@@ -65,6 +142,7 @@ void ControllerLogic::respond(const ardrone_control::ControlData data)
     std_msgs::Empty empty_msg;
     geometry_msgs::Twist twist_msg;
     double wall_distance;
+
     switch(state)
     {
         case ON_GROUND:
@@ -94,7 +172,7 @@ void ControllerLogic::respond(const ardrone_control::ControlData data)
         case APPROACHING_WALL:
         {
             wall_distance = data.distances.front_sensor;
-            twist_msg = addLinearX(twist_msg,data, this->kp_approach_wall);
+            twist_msg = addPDX(twist_msg,data, this->kp_approach_wall, this->kd_approach_wall);
             twist_pub.publish(twist_msg);
             ROS_INFO("wall distance %f, desired wall distance: %f",wall_distance,desired_wall_distance_front);
 						//ROS_INFO("right sensor %f", data.distances.front_right_sensor);
