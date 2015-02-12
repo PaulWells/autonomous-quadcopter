@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find simulated_drone)/worlds/autonomous_flight/round_room.world"/>
+  </include>
+
+
+  <!-- Spawn simulated quadrotor uav -->
+  <include file="$(find simulated_drone)/launch/modified_drone.launch" >
+    <arg name="model" value="$(find simulated_drone)/urdf/quadrotor_three_sensors.urdf.xacro"/> 
+  </include>
+
+  <node name="distance_rerouter" pkg="ardrone_control" type="distance_rerouter" output="screen"/>
+  <node name="control_data_synchronizer" pkg="ardrone_control" type="control_data_synchronizer"/>
+  <node name="controller" pkg="ardrone_control" type="controller" output="screen"/>
+  <node name="image_processor" pkg="ardrone_control" type="image_processor"/>
+</launch>
