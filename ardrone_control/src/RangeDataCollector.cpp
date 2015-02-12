@@ -8,7 +8,7 @@ RangeDataCollector::RangeDataCollector(const ros::Publisher& pub)
 {
     this->pub = pub;
     this->history_size = 5; //The arduino should run this many times faster thanthe controller
-    this->filter = MEDIAN;
+    this->filter = MEAN;
     clearHistories();
 }
 
