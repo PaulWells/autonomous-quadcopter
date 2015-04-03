@@ -24,7 +24,7 @@ void loop()
   distance_pub.publish( &distances );
   
   nh.spinOnce();
-  delay(20);
+  delay(30);
 }
 
 float analogToDistance(float analog){

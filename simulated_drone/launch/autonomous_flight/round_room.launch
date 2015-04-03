@@ -11,4 +11,8 @@
     <arg name="model" value="$(find simulated_drone)/urdf/quadrotor_three_sensors.urdf.xacro"/> 
   </include>
 
+	<node name="distance_rerouter" pkg="ardrone_control" type="distance_rerouter" output="screen"/>
+  <node name="control_data_synchronizer" pkg="ardrone_control" type="control_data_synchronizer"/>
+  <node name="controller" pkg="ardrone_control" type="controller" output="screen"/>
+  <node name="image_processor" pkg="ardrone_control" type="image_processor"/>
 </launch>
